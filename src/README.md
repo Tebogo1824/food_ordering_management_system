@@ -21,7 +21,7 @@ A lightweight, mobile-friendly ordering page for Junxion Cafe. Customers can bro
 
 | File or folder | Purpose |
 | --- | --- |
-| `src/kota-order.html` | Menu, cart, and checkout page structure |
+| `src/index.html` | Menu, cart, and checkout page structure |
 | `src/kota-order.css` | Page styling and responsive layout |
 | `src/tailwind.css` | Tailwind CSS entry point and source configuration |
 | `tailwind.css` | Generated Tailwind stylesheet loaded by the page |
@@ -39,7 +39,7 @@ npm.cmd install
 npm.cmd run build:css
 ```
 
-The build disables automatic source detection in `src/tailwind.css`, scans `src/kota-order.html` and `src/kota-order.js` through explicit `@source` directives, and writes `tailwind.css` to the project root. The page loads `../tailwind.css` alongside `kota-order.css`, which provides the cafe theme, responsive layout, background animation, and component styling.
+The build disables automatic source detection in `src/tailwind.css`, scans `src/index.html` and `src/kota-order.js` through explicit `@source` directives, and writes `tailwind.css` to the project root. The page loads `../tailwind.css` alongside `kota-order.css`, which provides the cafe theme, responsive layout, background animation, and component styling.
 
 Start a local web server:
 
@@ -53,11 +53,11 @@ If `py` is not available, use:
 python -m http.server 8000
 ```
 
-Then open [http://localhost:8000/src/kota-order.html](http://localhost:8000/src/kota-order.html) in a browser. Keep the terminal open while testing; press `Ctrl+C` to stop the server. Re-run `npm.cmd run build:css` after changing Tailwind classes, or use `npm.cmd run watch:css` to rebuild as files change.
+Then open [http://localhost:8000/src/index.html](http://localhost:8000/src/index.html) in a browser. Keep the terminal open while testing; press `Ctrl+C` to stop the server. Re-run `npm.cmd run build:css` after changing Tailwind classes, or use `npm.cmd run watch:css` to rebuild as files change.
 
 ## Use Tailwind
 
-Add Tailwind utility classes to the page or JavaScript-rendered markup, then run `npm.cmd run build:css`. The entry point is `src/tailwind.css` and its `@source` directives keep scanning limited to `src/kota-order.html` and `src/kota-order.js`. The generated `tailwind.css` is required at runtime, so rebuild it before publishing changes to Tailwind classes.
+Add Tailwind utility classes to the page or JavaScript-rendered markup, then run `npm.cmd run build:css`. The entry point is `src/tailwind.css` and its `@source` directives keep scanning limited to `src/index.html` and `src/kota-order.js`. The generated `tailwind.css` is required at runtime, so rebuild it before publishing changes to Tailwind classes.
 
 ## Customer ordering workflow
 
@@ -73,9 +73,9 @@ The delivery banner also opens a WhatsApp conversation for delivery enquiries.
 
 - Edit the `MENU` list in `src/kota-order.js` to change item names, prices, or included ingredients. The displayed menu, cart, and order message use this data.
 - Update `SHOP_NUMBER` in `src/kota-order.js` to change the checkout WhatsApp destination. Use international format without a leading `+`, spaces, or a local leading `0`.
-- The delivery enquiry link and its displayed delivery details are in `src/kota-order.html`.
+- The delivery enquiry link and its displayed delivery details are in `src/index.html`.
 - Keep image files in `images/` at their referenced paths when replacing the branding or page artwork.
 
 ## Deployment
 
-This is a static site: publish `src/kota-order.html`, `src/kota-order.css`, `src/kota-order.js`, the generated root `tailwind.css`, and the `images/` folder together on any static web host. Preserve the directory structure and relative paths so the stylesheets and images load correctly. No server-side order handling is included.
+This is a static site: publish `src/index.html`, `src/kota-order.css`, `src/kota-order.js`, the generated root `tailwind.css`, and the `images/` folder together on any static web host. Preserve the directory structure and relative paths so the stylesheets and images load correctly. No server-side order handling is included.
