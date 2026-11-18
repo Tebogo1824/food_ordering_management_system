@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Junxion Cafe | Kota Order</title>
+  <link rel="stylesheet" href="tailwind.css">
+  <link rel="stylesheet" href="kota-order.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <a class="brand" href="#" aria-label="Junxion Cafe home">
+      <img src="images/junxion-cafe-logo_no_bg.png" alt="Junxion Cafe">
+    </a>
+    <div class="header-copy">
+      <p class="eyebrow">Junxion Cafe</p>
+      <h1>Menu</h1>
+      <p class="sub"> Order today and Taste the difference</p>
+    </div>
+  </header>
+
+  <a class="delivery-ad" href="https://wa.me/27836700719?text=Hi%2C%20I%27d%20like%20to%20ask%20about%20delivery."
+     target="_blank" rel="noopener noreferrer"
+     aria-label="Package Hero delivery: Kanana R30, Orkney R35. Message on WhatsApp at 083 670 0719.">
+    <img src="images/package-hero-ad.jpg" alt="" class="delivery-ad-image">
+    <span class="delivery-marquee" aria-hidden="true">
+      <span class="delivery-marquee-track">
+        <span>PACKAGE HERO DELIVERY &bull; KANANA R30 &bull; ORKNEY R35 &bull; WHATSAPP 083 670 0719</span>
+        <span>PACKAGE HERO DELIVERY &bull; KANANA R30 &bull; ORKNEY R35 &bull; WHATSAPP 083 670 0719</span>
+      </span>
+    </span>
+    <span class="delivery-ad-cta">Message Package Hero</span>
+  </a>
+
+  <main class="order-layout">
+    <section class="menu-section" aria-label="Kota menu">
+      <div id="menu" class="menu-list"></div>
+    </section>
+
+    <aside id="cart" class="cart-panel" aria-labelledby="cartTitle">
+      <div class="cart-header">
+        <h2 id="cartTitle"><span aria-hidden="true">🛒</span> Your Cart</h2>
+        <button id="cartClose" class="cart-close" type="button" aria-label="Hide cart">×</button>
+      </div>
+
+      <div id="cartItems" class="cart-items" aria-live="polite">
+        <p class="empty-cart">Your cart is empty. Please Add a kota to get started.</p>
+      </div>
+
+      <div class="cart-footer">
+        <div class="cart-summary">
+          <div class="summary-row"><span>Subtotal:</span><strong id="subtotal">R0</strong></div>
+          <div class="summary-row total-row"><span>Total:</span><strong id="total">R0</strong></div>
+        </div>
+
+        <form id="orderForm" novalidate>
+          <label for="name">Your name</label>
+          <input id="name" name="name" type="text" autocomplete="name" placeholder="e.g. Thabo" required>
+
+          <label for="notes">Notes <span>(optional)</span></label>
+          <textarea id="notes" name="notes" rows="2" placeholder="e.g. extra chilli, no atchar"></textarea>
+
+          <div id="error" role="alert" aria-live="assertive"></div>
+          <button id="orderBtn" type="submit"><span aria-hidden="true">◉</span> Place Order via WhatsApp <span aria-hidden="true">›</span></button>
+          <p class="checkout-note">Your order will be sent to our WhatsApp.</p>
+        </form>
+      </div>
+    </aside>
+  </main>
+
+  <button id="cartToggle" class="cart-toggle" type="button" aria-controls="cart" aria-expanded="true">
+    <span aria-hidden="true">🛒</span> View Cart <span id="cartCount">0</span>
+  </button>
+  <script src="kota-order.js"></script>
+
+</body>
+</html>
