@@ -13,7 +13,7 @@ A lightweight, mobile-friendly ordering page for Junxion Cafe. Customers can bro
 - Sticky delivery banner with scrolling promotional text that pauses on hover or keyboard focus.
 - Responsive cart: sticky beside the menu on desktop and a toggleable drawer on smaller screens.
 - Tailwind CSS v4 local build pipeline, ready to compile utilities from the page and JavaScript-rendered menu.
-- An optional Python command-line utility for batch-removing image backgrounds.
+- An optional Python command-line utility in `Bg_remover/` for batch-removing image backgrounds.
 
 > **Ordering note:** Checkout opens WhatsApp with a prepared message. The customer reviews and sends it in WhatsApp; the site does not process payments or submit orders to a server.
 
@@ -24,40 +24,43 @@ A lightweight, mobile-friendly ordering page for Junxion Cafe. Customers can bro
 | `src/index.html` | Menu, cart, and checkout page structure |
 | `src/kota-order.css` | Page styling and responsive layout |
 | `src/tailwind.css` | Tailwind CSS entry point and source configuration |
-| `tailwind.css` | Generated Tailwind stylesheet loaded by the page |
 | `src/kota-order.js` | Menu data, cart behavior, persistence, and WhatsApp checkout |
+| `scripts/` | Prepares the clean deployment output and copies static assets |
+| `netlify.toml` | Netlify build command and publish directory |
+| `dist/` | Generated deployment output; do not edit directly |
 | `package.json` | Tailwind CSS build scripts and development dependencies |
 | `package-lock.json` | Locked npm dependency versions |
+| `Bg_remover/remove_background.py` | Optional batch image-background removal CLI |
 | `images/` | Cafe logo, delivery advertisement, and page background |
 
 ## Build and run the ordering page
 
-Install [Node.js](https://nodejs.org/) (which includes npm), then from the project folder install dependencies and compile Tailwind:
+Install [Node.js](https://nodejs.org/) 20 or newer, then from the project folder install dependencies and build the deployable site:
 
 ```powershell
 npm.cmd install
-npm.cmd run build:css
+npm.cmd run build
 ```
 
-The build disables automatic source detection in `src/tailwind.css`, scans `src/index.html` and `src/kota-order.js` through explicit `@source` directives, and writes `tailwind.css` to the project root. The page loads `../tailwind.css` alongside `kota-order.css`, which provides the cafe theme, responsive layout, background animation, and component styling.
+The build prepares `dist/`, compiles Tailwind, and copies the HTML, custom CSS, JavaScript, and images into that directory. Tailwind scans `src/index.html` and `src/kota-order.js` through the explicit `@source` directives in `src/tailwind.css`.
 
-Start a local web server:
+To preview the production build locally, serve the `dist/` directory:
 
 ```powershell
-py -m http.server 8000
+py -m http.server 8000 --directory dist
 ```
 
 If `py` is not available, use:
 
 ```powershell
-python -m http.server 8000
+python -m http.server 8000 --directory dist
 ```
 
-Then open [http://localhost:8000/src/index.html](http://localhost:8000/src/index.html) in a browser. Keep the terminal open while testing; press `Ctrl+C` to stop the server. Re-run `npm.cmd run build:css` after changing Tailwind classes, or use `npm.cmd run watch:css` to rebuild as files change.
+Then open [http://localhost:8000/](http://localhost:8000/) in a browser. Keep the terminal open while testing; press `Ctrl+C` to stop the server. Re-run `npm.cmd run build` after changing source files. After building once, use `npm.cmd run watch:css` to rebuild Tailwind while editing utility classes.
 
 ## Use Tailwind
 
-Add Tailwind utility classes to the page or JavaScript-rendered markup, then run `npm.cmd run build:css`. The entry point is `src/tailwind.css` and its `@source` directives keep scanning limited to `src/index.html` and `src/kota-order.js`. The generated `tailwind.css` is required at runtime, so rebuild it before publishing changes to Tailwind classes.
+Add Tailwind utility classes to the page or JavaScript-rendered markup, then run `npm.cmd run build`. The entry point is `src/tailwind.css` and its `@source` directives keep scanning limited to `src/index.html` and `src/kota-order.js`. The generated stylesheet is written to `dist/tailwind.css`.
 
 ## Customer ordering workflow
 
@@ -76,6 +79,10 @@ The delivery banner also opens a WhatsApp conversation for delivery enquiries.
 - The delivery enquiry link and its displayed delivery details are in `src/index.html`.
 - Keep image files in `images/` at their referenced paths when replacing the branding or page artwork.
 
+## Deploy on Netlify
+
+The included `netlify.toml` configures Netlify to run `npm run build` and publish `dist/`. Connect the repository to Netlify and use the default build settings from this file; do not set the publish directory to `src/` or upload `dist/` as the source. Each deploy creates a fresh `dist/` output from the committed source files.
+
 ## Deployment
 
-This is a static site: publish `src/index.html`, `src/kota-order.css`, `src/kota-order.js`, the generated root `tailwind.css`, and the `images/` folder together on any static web host. Preserve the directory structure and relative paths so the stylesheets and images load correctly. No server-side order handling is included.
+This is a static site: build it with `npm run build`, then publish the contents of `dist/` on any static web host. No server-side order handling is included.

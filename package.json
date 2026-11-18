@@ -2,10 +2,15 @@
   "name": "food_ordering_management_system",
   "version": "1.0.0",
   "description": "Static ordering page for Junxion Cafe, styled with custom CSS and Tailwind CSS.",
-  "main": "kota-order.js",
+  "private": true,
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
-    "build:css": "tailwindcss -i ./src/tailwind.css -o ./tailwind.css",
-    "watch:css": "tailwindcss -i ./src/tailwind.css -o ./tailwind.css --watch"
+    "prebuild": "node scripts/prepare-dist.js",
+    "build": "npm run build:css && node scripts/copy-static.js",
+    "build:css": "tailwindcss -i ./src/tailwind.css -o ./dist/tailwind.css --minify",
+    "watch:css": "tailwindcss -i ./src/tailwind.css -o ./dist/tailwind.css --watch"
   },
   "keywords": [],
   "author": "",

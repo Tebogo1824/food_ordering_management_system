@@ -30,7 +30,7 @@ body::before {
   inset: 0;
   background:
     linear-gradient(rgba(18, 14, 9, 0.62), rgba(18, 14, 9, 0.62)),
-    url("../images/food-background.jpg") center / cover no-repeat;
+    url("images/food-background.jpg") center / cover no-repeat;
   content: "";
   pointer-events: none;
   -webkit-animation: kenburns-bottom-right 5s ease-out both;
