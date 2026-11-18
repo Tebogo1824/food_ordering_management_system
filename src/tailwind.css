@@ -1,4 +1,4 @@
 @import "tailwindcss" source(none);
 
-@source "../kota-order.html";
-@source "../kota-order.js";
+@source "./kota-order.html";
+@source "./kota-order.js";
