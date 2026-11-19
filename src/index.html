@@ -51,12 +51,31 @@
       <div class="cart-footer">
         <div class="cart-summary">
           <div class="summary-row"><span>Subtotal:</span><strong id="subtotal">R0</strong></div>
+          <div class="summary-row"><span>Delivery:</span><strong id="deliveryFee">R0</strong></div>
           <div class="summary-row total-row"><span>Total:</span><strong id="total">R0</strong></div>
         </div>
 
         <form id="orderForm" novalidate>
           <label for="name">Your name</label>
           <input id="name" name="name" type="text" autocomplete="name" placeholder="e.g. Thabo" required>
+
+          <label for="contactNumber">Contact number</label>
+          <input id="contactNumber" name="contactNumber" type="tel" autocomplete="tel" inputmode="tel"
+                 placeholder="e.g. 082 123 4567" maxlength="24" required>
+
+          <label for="fulfilment">Delivery or collection</label>
+          <select id="fulfilment" name="fulfilment" required>
+            <option value="">Choose delivery or collection</option>
+            <option value="collection">Collection (R0)</option>
+            <option value="kanana">Delivery to Kanana (R30)</option>
+            <option value="orkney">Delivery to Orkney (R35)</option>
+          </select>
+
+          <div id="deliveryAddressField" hidden>
+            <label for="deliveryAddress">Full delivery address</label>
+            <textarea id="deliveryAddress" name="deliveryAddress" rows="2"
+                      autocomplete="street-address" placeholder="Street address, area, and any directions"></textarea>
+          </div>
 
           <label for="notes">Notes <span>(optional)</span></label>
           <textarea id="notes" name="notes" rows="2" placeholder="e.g. extra chilli, no atchar"></textarea>

@@ -7,8 +7,9 @@ A lightweight, mobile-friendly ordering page for Junxion Cafe. Customers can bro
 - Eight kota options with prices and included ingredients.
 - Cart quantity controls, item removal, and a live subtotal.
 - Cart contents saved in the browser with `localStorage`.
-- Checkout validation for an empty cart and a missing name.
-- WhatsApp checkout with the order, customer name, and optional notes pre-filled.
+- Checkout validation for an empty cart and missing customer/contact/delivery details.
+- WhatsApp checkout with itemized quantities, delivery or collection, customer contact, totals, and optional notes pre-filled.
+- Automatic delivery fees of R30 to Kanana and R35 to Orkney; collection has no delivery fee.
 - Warm cream-and-gold styling with a five-second Ken Burns background zoom that respects reduced-motion preferences.
 - Sticky delivery banner with scrolling promotional text that pauses on hover or keyboard focus.
 - Responsive cart: sticky beside the menu on desktop and a toggleable drawer on smaller screens.
@@ -66,7 +67,7 @@ Add Tailwind utility classes to the page or JavaScript-rendered markup, then run
 
 1. Browse the menu and use **+** and **−** to choose quantities.
 2. Review or adjust items in the cart. The cart is remembered in the same browser.
-3. Enter a name and, optionally, preparation notes.
+3. Enter a name and contact number, choose collection or delivery, and provide the full address for delivery. Preparation notes are optional.
 4. Choose **Place Order via WhatsApp**.
 5. Review the pre-filled message in WhatsApp and send it to complete the request.
 
@@ -76,6 +77,7 @@ The delivery banner also opens a WhatsApp conversation for delivery enquiries.
 
 - Edit the `MENU` list in `src/kota-order.js` to change item names, prices, or included ingredients. The displayed menu, cart, and order message use this data.
 - Update `SHOP_NUMBER` in `src/kota-order.js` to change the checkout WhatsApp destination. Use international format without a leading `+`, spaces, or a local leading `0`.
+- Update `DELIVERY_FEES` in `src/kota-order.js` and the matching fulfilment options in `src/index.html` if delivery prices change.
 - The delivery enquiry link and its displayed delivery details are in `src/index.html`.
 - Keep image files in `images/` at their referenced paths when replacing the branding or page artwork.
 

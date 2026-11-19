@@ -1,6 +1,11 @@
 // Shop WhatsApp number: international format, no +, spaces, or leading 0.
 const SHOP_NUMBER = "27836700719";
 const CART_STORAGE_KEY = "junxion-cafe-cart";
+const DELIVERY_FEES = {
+  collection: 0,
+  kanana: 30,
+  orkney: 35,
+};
 
 // Keep the menu in one place; the menu and cart are both rendered from this list.
 const MENU = [
@@ -67,6 +72,11 @@ function getSubtotal() {
   return MENU.reduce((sum, item, index) => sum + item.price * quantities[index], 0);
 }
 
+function getDeliveryFee() {
+  const fulfilment = document.getElementById("fulfilment").value;
+  return DELIVERY_FEES[fulfilment] || 0;
+}
+
 function renderCart() {
   const selectedItems = MENU
     .map((item, index) => ({ item, index, quantity: quantities[index] }))
@@ -99,9 +109,11 @@ function renderCart() {
 
   const itemCount = quantities.reduce((sum, quantity) => sum + quantity, 0);
   const subtotal = getSubtotal();
+  const deliveryFee = getDeliveryFee();
   document.getElementById("cartCount").textContent = itemCount;
   document.getElementById("subtotal").textContent = `R${subtotal}`;
-  document.getElementById("total").textContent = `R${subtotal}`;
+  document.getElementById("deliveryFee").textContent = `R${deliveryFee}`;
+  document.getElementById("total").textContent = `R${subtotal + deliveryFee}`;
 }
 
 function updateCart() {
@@ -134,9 +146,21 @@ function handleQuantityClick(event) {
   updateCart();
 }
 
+function updateFulfilmentFields() {
+  const fulfilment = document.getElementById("fulfilment").value;
+  const addressField = document.getElementById("deliveryAddressField");
+  const addressInput = document.getElementById("deliveryAddress");
+  const requiresAddress = fulfilment === "kanana" || fulfilment === "orkney";
+
+  addressField.hidden = !requiresAddress;
+  addressInput.required = requiresAddress;
+  renderCart();
+}
+
 renderMenu();
 updateCart();
 setCartVisibility(!window.matchMedia("(max-width: 900px)").matches);
+updateFulfilmentFields();
 
 menuDiv.addEventListener("click", handleQuantityClick);
 cartItemsDiv.addEventListener("click", handleQuantityClick);
@@ -145,10 +169,17 @@ document.getElementById("cartToggle").addEventListener("click", () => {
   const isVisible = !document.getElementById("cart").classList.contains("is-collapsed");
   setCartVisibility(!isVisible);
 });
+document.getElementById("fulfilment").addEventListener("change", () => {
+  errorDiv.textContent = "";
+  updateFulfilmentFields();
+});
 
 document.getElementById("orderForm").addEventListener("submit", (event) => {
   event.preventDefault();
   const name = document.getElementById("name").value.trim();
+  const contactNumber = document.getElementById("contactNumber").value.trim();
+  const fulfilment = document.getElementById("fulfilment").value;
+  const deliveryAddress = document.getElementById("deliveryAddress").value.trim();
   const notes = document.getElementById("notes").value.trim();
 
   if (getSubtotal() === 0) {
@@ -160,16 +191,51 @@ document.getElementById("orderForm").addEventListener("submit", (event) => {
     document.getElementById("name").focus();
     return;
   }
+  const phoneDigits = contactNumber.replace(/\D/g, "");
+  if (!/^[0-9+() -]+$/.test(contactNumber) || phoneDigits.length < 7 || phoneDigits.length > 15) {
+    errorDiv.textContent = "Please enter a valid contact number.";
+    document.getElementById("contactNumber").focus();
+    return;
+  }
+  if (!fulfilment) {
+    errorDiv.textContent = "Please choose delivery or collection.";
+    document.getElementById("fulfilment").focus();
+    return;
+  }
+  if ((fulfilment === "kanana" || fulfilment === "orkney") && !deliveryAddress) {
+    errorDiv.textContent = "Please enter the full delivery address.";
+    document.getElementById("deliveryAddress").focus();
+    return;
+  }
 
-  const orderLines = MENU
-    .map((item, index) => quantities[index] > 0 ? `${quantities[index]} × ${item.name} — R${item.price * quantities[index]}` : null)
+  const selectedItems = MENU
+    .map((item, index) => quantities[index] > 0 ? { item, quantity: quantities[index] } : null)
     .filter(Boolean);
+  const orderLines = selectedItems.map(
+    ({ item, quantity }) => `- ${quantity} × ${item.name} — R${item.price * quantity} (R${item.price} each)`
+  );
+  const itemCount = selectedItems.reduce((sum, entry) => sum + entry.quantity, 0);
+  const subtotal = getSubtotal();
+  const deliveryFee = getDeliveryFee();
+  const total = subtotal + deliveryFee;
+  const deliveryArea = fulfilment === "kanana" ? "Kanana" : "Orkney";
+  const fulfilmentDescription = fulfilment === "collection"
+    ? "Collection"
+    : `Delivery to ${deliveryAddress} (${deliveryArea})`;
+
   const message = [
-    "Hi, I'd like to place an order:",
+    "Hi! I’d like to place an order:",
+    "",
+    "*Item(s):*",
     ...orderLines,
-    `Subtotal: R${getSubtotal()}`,
-    `Total: R${getSubtotal()}`,
-    `Name: ${name}`,
+    `*Quantity:* ${itemCount}`,
+    `*Delivery / Collection:* ${fulfilmentDescription}`,
+    `*Contact Name & Number:* ${name} – ${contactNumber}`,
+    `*Subtotal:* R${subtotal}`,
+    `*Delivery:* R${deliveryFee}`,
+    `*Total:* R${total}`,
+    "",
+    "Please confirm availability and the total amount (including delivery). Thank you!",
     notes ? `Notes: ${notes}` : null,
   ].filter(Boolean).join("\n");
 
